@@ -346,7 +346,8 @@ const startCreating = async () => {
         maxEditionCount += layerConfigurations[i].growEditionSizeTo;
     }
 
-    for (let i = 0; i < maxEditionCount; i++) {
+    let startOffset = network == NETWORK.sol ? 0 : 1;
+    for (let i = startOffset; i < maxEditionCount + startOffset; i++) {
         abstractedIndexes.push(i);
     }
 

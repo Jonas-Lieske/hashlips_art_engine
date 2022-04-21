@@ -20,13 +20,13 @@ const loadImg = async (_img) => {
 // read image paths
 const imageList = [];
 const rawdata = fs.readdirSync(imageDir).forEach((file) => {
-  imageList.push(loadImg(`${imageDir}/${file}`));
+  imageList.push(`${imageDir}/${file}`);
 });
 
 const saveProjectPreviewGIF = async (_data) => {
   // Extract from preview config
   const { numberOfImages, order, repeat, quality, delay, imageName } =
-    preview_gif;
+      preview_gif;
   // Extract from format config
   const { width, height } = format;
   // Prepare canvas
@@ -35,51 +35,57 @@ const saveProjectPreviewGIF = async (_data) => {
 
   if (_data.length < numberOfImages) {
     console.log(
-      `You do not have enough images to create a gif with ${numberOfImages} images.`
+        `You do not have enough images to create a gif with ${numberOfImages} images.`
     );
   } else {
     // Shout from the mountain tops
     console.log(
-      `Preparing a ${previewCanvasWidth}x${previewCanvasHeight} project preview with ${_data.length} images.`
+        `Preparing a ${previewCanvasWidth}x${previewCanvasHeight} project preview with ${_data.length} images.`
     );
     const previewPath = `${buildDir}/${imageName}`;
 
     ctx.clearRect(0, 0, width, height);
 
     hashlipsGiffer = new HashlipsGiffer(
-      canvas,
-      ctx,
-      `${previewPath}`,
-      repeat,
-      quality,
-      delay
+        canvas,
+        ctx,
+        `${previewPath}`,
+        repeat,
+        quality,
+        delay
     );
     hashlipsGiffer.start();
 
-    await Promise.all(_data).then((renderObjectArray) => {
-      // Determin the order of the Images before creating the gif
-      if (order == "ASC") {
-        // Do nothing
-      } else if (order == "DESC") {
-        renderObjectArray.reverse();
-      } else if (order == "MIXED") {
-        renderObjectArray = renderObjectArray.sort(() => Math.random() - 0.5);
-      }
+    // Determine the order of the Images before creating the gif
+    if (order == "ASC") {
+      // Do nothing
+    } else if (order == "DESC") {
+      _data.reverse();
+    } else if (order == "MIXED") {
+      _data = _data.sort(() => Math.random() - 0.5);
+    }
 
-      // Reduce the size of the array of Images to the desired amount
-      if (parseInt(numberOfImages) > 0) {
-        renderObjectArray = renderObjectArray.slice(0, numberOfImages);
-      }
+    // Reduce the size of the array of Images to the desired amount
+    if (parseInt(numberOfImages) > 0) {
+      _data = _data.slice(0, numberOfImages);
+    }
+
+    // load the images now that we've reduced and sorted the array
+    _data = _data.map((dataItem) => {
+      return loadImg(dataItem);
+    })
+
+    await Promise.all(_data).then((renderObjectArray) => {
 
       renderObjectArray.forEach((renderObject, index) => {
         ctx.globalAlpha = 1;
         ctx.globalCompositeOperation = "source-over";
         ctx.drawImage(
-          renderObject.loadedImage,
-          0,
-          0,
-          previewCanvasWidth,
-          previewCanvasHeight
+            renderObject.loadedImage,
+            0,
+            0,
+            previewCanvasWidth,
+            previewCanvasHeight
         );
         hashlipsGiffer.add();
       });

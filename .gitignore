@@ -143,3 +143,9 @@ dist
 
 # IntelliJ
 .idea
+log
+package-lock.json
+package-lock.json
+yarn.lock
+yarn.lock
+*.lock

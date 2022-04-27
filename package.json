@@ -20,6 +20,7 @@
     "update_info": "node utils/update_info.js",
     "preview_gif": "node utils/preview_gif.js",
     "generate_metadata": "node utils/generate_metadata.js",
+    "hide_metadata": "node utils/hide_metadata.js",
     "compress": "node utils/compress.js"
   },
   "author": "Daniel Eugene Botha (HashLips)",

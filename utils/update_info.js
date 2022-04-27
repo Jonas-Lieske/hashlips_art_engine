@@ -1,14 +1,14 @@
 const basePath = process.cwd();
-const { NETWORK } = require(`${basePath}/constants/network.js`);
-const fs = require("fs");
+import NETWORK from "../constants/network.js";
+import fs from "fs";
 
-const {
+import {
   baseUri,
   description,
   namePrefix,
   network,
   solanaMetadata,
-} = require(`${basePath}/src/config.js`);
+} from "../src/config.js";
 
 // read json data
 let rawdata = fs.readFileSync(`${basePath}/build/json/_metadata.json`);

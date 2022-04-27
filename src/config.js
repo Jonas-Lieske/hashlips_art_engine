@@ -8,7 +8,7 @@ const network = NETWORK.eth;
 const namePrefix = "Your Collection";
 const description = "Remember to replace this description";
 const baseUri = "ipfs://NewUriToReplace";
-const hiddenBaseUri = "ipfs://NewUriToReplace";
+const hiddenImageUri = "ipfs://NewUriToReplace";
 
 const solanaMetadata = {
   symbol: "YC",
@@ -104,7 +104,7 @@ const preview_gif = {
 module.exports = {
   format,
   baseUri,
-  hiddenBaseUri,
+  hiddenImageUri,
   description,
   background,
   uniqueDnaTorrance,

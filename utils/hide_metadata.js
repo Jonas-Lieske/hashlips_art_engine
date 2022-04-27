@@ -3,7 +3,7 @@ import NETWORK from "../constants/network.js";
 import fs from "fs";
 
 import {
-  hiddenBaseUri,
+  hiddenImageUri,
   description,
   namePrefix,
   network,
@@ -27,7 +27,7 @@ data.forEach((item) => {
   } else {
     item.name = `${namePrefix} #${item.edition}`;
     item.description = placeHolderText;
-    item.image = `${hiddenBaseUri}/${item.edition}.png`;
+    item.image = `${hiddenImageUri}`;
   }
 
   item.attributes.forEach((attribute) => {

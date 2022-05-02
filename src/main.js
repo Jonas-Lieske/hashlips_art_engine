@@ -305,25 +305,31 @@ const createDna = (_layers) => {
     return randNum.join(DNA_DELIMITER);
 };
 
-const writeMetaData = (_data) => {
-    return new Promise((resolve, reject) =>
-            fs.writeFileSync(`${buildDir}/json/_metadata.json`, _data),
-        (err, data) => err ? reject(err) : resolve()
+function writeMetaData(_data) {
+    return new Promise((resolve, reject) => {
+            fs.writeFile(`${buildDir}/json/_metadata.json`, _data,
+                (err, data) => err ? reject(err) : resolve())
+        }
     );
-};
+}
 
-const saveMetaDataSingleFile = (_editionCount) => {
-    let metadata = metadataList.find((meta) => meta.edition == _editionCount);
+function saveMetaDataSingleFile(_editionCount) {
     debugLogs
         ? console.log(
             `Writing metadata for ${_editionCount}: ${JSON.stringify(metadata)}`
         )
         : null;
-    fs.writeFileSync(
-        `${buildDir}/json/${_editionCount}.json`,
-        JSON.stringify(metadata, null, 2)
+
+    return new Promise((resolve, reject) => {
+            let metadata = metadataList.find((meta) => meta.edition == _editionCount);
+            fs.writeFile(
+                `${buildDir}/json/${_editionCount}.json`,
+                JSON.stringify(metadata, null, 2),
+                (err, data) => err ? reject(err) : resolve()
+            )
+        }
     );
-};
+}
 
 function shuffle(array) {
     let currentIndex = array.length,

@@ -306,7 +306,10 @@ const createDna = (_layers) => {
 };
 
 const writeMetaData = (_data) => {
-    fs.writeFileSync(`${buildDir}/json/_metadata.json`, _data);
+    return new Promise((resolve, reject) =>
+            fs.writeFileSync(`${buildDir}/json/_metadata.json`, _data),
+        (err, data) => err ? reject(err) : resolve()
+    );
 };
 
 const saveMetaDataSingleFile = (_editionCount) => {

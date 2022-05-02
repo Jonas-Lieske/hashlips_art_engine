@@ -22,9 +22,6 @@ const {
     solanaMetadata,
     gif,
 } = require(`${basePath}/src/config.js`);
-const canvas = createCanvas(format.width, format.height);
-const ctx = canvas.getContext("2d");
-ctx.imageSmoothingEnabled = format.smoothing;
 var metadataList = [];
 var attributesList = [];
 var dnaList = new Set();
@@ -110,10 +107,15 @@ const layersSetup = (layersOrder) => {
     return layers;
 };
 
-const saveImage = (_editionCount) => {
-    fs.writeFileSync(
-        `${buildDir}/images/${_editionCount}.png`,
-        canvas.toBuffer("image/png")
+const saveImage = (canvas, _editionCount) => {
+    return new Promise((resolve, reject) =>
+        canvas.toBuffer((err, buffer) =>
+            fs.writeFile(
+                `${buildDir}/images/${_editionCount}.png`,
+                buffer,
+                (err, data) => err ? reject(err) : resolve()
+            )
+        )
     );
 };
 
@@ -123,7 +125,7 @@ const genColor = () => {
     return pastel;
 };
 
-const drawBackground = () => {
+const drawBackground = (ctx) => {
     ctx.fillStyle = background.static ? background.default : genColor();
     ctx.fillRect(0, 0, format.width, format.height);
 };
@@ -198,7 +200,7 @@ const addText = (_sig, x, y, size) => {
     ctx.fillText(_sig, x, y);
 };
 
-const drawElement = (_renderObject, _index, _layersLen) => {
+const drawElement = (ctx, _renderObject, _index, _layersLen) => {
     ctx.globalAlpha = _renderObject.layer.opacity;
     ctx.globalCompositeOperation = _renderObject.layer.blend;
     text.only
@@ -366,6 +368,10 @@ const startCreating = async () => {
             ) {
             let newDna = createDna(layers);
             if (isDnaUnique(dnaList, newDna)) {
+                const canvas = createCanvas(format.width, format.height);
+                const ctx = canvas.getContext("2d");
+                ctx.imageSmoothingEnabled = format.smoothing;
+
                 let results = constructLayerToDna(newDna, layers);
                 let loadedElements = [];
 
@@ -388,10 +394,11 @@ const startCreating = async () => {
                         hashlipsGiffer.start();
                     }
                     if (background.generate) {
-                        drawBackground();
+                        drawBackground(ctx);
                     }
                     renderObjectArray.forEach((renderObject, index) => {
                         drawElement(
+                            ctx,
                             renderObject,
                             index,
                             layerConfigurations[layerConfigIndex].layersOrder.length
@@ -406,7 +413,7 @@ const startCreating = async () => {
                     debugLogs
                         ? console.log("Editions left to create: ", abstractedIndexes)
                         : null;
-                    saveImage(abstractedIndexes[0]);
+                    saveImage(canvas, abstractedIndexes[0]);
                     addMetadata(newDna, abstractedIndexes[0]);
                     saveMetaDataSingleFile(abstractedIndexes[0]);
                     console.log(

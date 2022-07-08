@@ -35,3 +35,5 @@ data.forEach((item) => {
 });
 
 console.log(occurences);
+
+export default occurences;

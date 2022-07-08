@@ -84,6 +84,7 @@ const extraMetadata = {};
 const rarityDelimiter = "#";
 
 const uniqueDnaTorrance = 10000;
+const simpleDnaBlockSize = 2;
 
 const preview = {
   thumbPerRow: 5,
@@ -121,4 +122,5 @@ module.exports = {
   solanaMetadata,
   gif,
   preview_gif,
+  simpleDnaBlockSize
 };

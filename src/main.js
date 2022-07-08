@@ -86,10 +86,14 @@ const getElements = (path) => {
         });
 };
 
-const layersSetup = (layersOrder) => {
+const layersSetup = (layersOrder, customDirectory) => {
+    let directory = layersDir;
+    if (customDirectory != undefined && customDirectory != "")
+        directory += "/" + customDirectory;
+
     const layers = layersOrder.map((layerObj, index) => ({
         id: index,
-        elements: getElements(`${layersDir}/${layerObj.name}/`),
+        elements: getElements(`${directory}/${layerObj.name}/`),
         name:
             layerObj.options?.["displayName"] != undefined
                 ? layerObj.options?.["displayName"]
@@ -359,7 +363,8 @@ const startCreating = async () => {
         : null;
     while (layerConfigIndex < layerConfigurations.length) {
         const layers = layersSetup(
-            layerConfigurations[layerConfigIndex].layersOrder
+            layerConfigurations[layerConfigIndex].layersOrder,
+            layerConfigurations[layerConfigIndex].directory
         );
         while (
             editionCount - editionOffset <= layerConfigurations[layerConfigIndex].growEditionSizeTo

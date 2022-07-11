@@ -414,10 +414,11 @@ const startCreating = async () => {
                     saveImage(abstractedIndexes[0]);
                     addMetadata(newDna, abstractedIndexes[0]);
                     saveMetaDataSingleFile(abstractedIndexes[0]);
+                    // console.log(
+                    //     `Created edition: ${abstractedIndexes[0]}, with DNA: ${sha1(newDna)}`
+                    // );
                     console.log(
-                        `Created edition: ${abstractedIndexes[0]}, with DNA: ${sha1(
-                            newDna
-                        )}`
+                        `Created edition: ${abstractedIndexes[0]} E${editionCount - editionOffset}/${layerConfigurations[layerConfigIndex].growEditionSizeTo} C${layerConfigIndex+1}/${layerConfigurations.length}, with DNA: ${sha1(newDna)}`
                     );
                 });
                 dnaList.add(filterDNAOptions(newDna));

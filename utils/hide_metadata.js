@@ -16,33 +16,19 @@ let data = JSON.parse(rawdata);
 
 let placeHolderText = "unknown";
 
-if (!fs.existsSync(`${basePath}/build/hidden_json`)){
-  fs.mkdirSync(`${basePath}/build/hidden_json`);
+let item = data[0];
+if (network == NETWORK.sol) {
+  item.name = `Unrevealed ${namePrefix}`;
+  item.description = description;
+} else {
+  item.name = `Unrevealed ${namePrefix}`;
+  item.description = description;
+  item.image = `${hiddenImageUri}`;
 }
 
-data.forEach((item) => {
-  if (network == NETWORK.sol) {
-    item.name = `${namePrefix} #${item.edition}`;
-    item.description = placeHolderText;
-  } else {
-    item.name = `${namePrefix} #${item.edition}`;
-    item.description = placeHolderText;
-    item.image = `${hiddenImageUri}`;
-  }
-
-  item.attributes.forEach((attribute) => {
-      attribute.value = placeHolderText;
-  });
-
-  fs.writeFileSync(
-    `${basePath}/build/hidden_json/${item.edition}.json`,
-    JSON.stringify(item, null, 2)
-  );
-});
-
 fs.writeFileSync(
-  `${basePath}/build/hidden_json/_metadata.json`,
-  JSON.stringify(data, null, 2)
+    `${basePath}/build/hidden.json`,
+    JSON.stringify(item, null, 2)
 );
 
 if (network == NETWORK.sol) {
